@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniBot Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-green: #22c55e;
+      --dark-green: #16a34a;
+      --primary-orange: #f97316;
+      --dark-orange: #ea580c;
+      --light-gray: #f3f4f6;
+      --text-dark: #1f2937;
+      --text-light: #4b5563;
+      --white: #ffffff;
+      --border-color: #e5e7eb;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--light-gray);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .logo-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      color: var(--white);
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    }
+
+    .logo-text {
+      color: var(--white);
+      font-weight: 700;
+      font-size: 1.2rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    header {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.85), rgba(249, 115, 22, 0.85)), 
+                  url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center / cover;
+      color: var(--white);
+      padding: 80px 20px;
+      text-align: center;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    header h1, header p, header a.cta-button {
+        position: relative;
+        z-index: 2;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    header p {
+      font-size: 1.25rem;
+      margin-bottom: 30px;
+      opacity: 0.9;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    header a.cta-button {
+      display: inline-block;
+      background: var(--white);
+      color: var(--dark-orange);
+      padding: 12px 25px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.2s ease, background-color 0.2s ease;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    header a.cta-button:hover {
+      transform: scale(1.05);
+      background-color: #fef7ed;
+      animation: none;
+    }
+
+    section {
+      background: var(--white);
+      margin: 30px auto;
+      padding: 50px 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    section.animate-in {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    section:first-of-type {
+      margin-top: -50px;
+      position: relative;
+      z-index: 10;
+    }
+    
+    h2 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 30px;
+      text-align: center;
+      background: linear-gradient(to right, var(--dark-green), var(--dark-orange));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+
+    p, ul {
+      font-size: 1.1rem;
+      color: var(--text-light);
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    ul {
+      text-align: left;
+      list-style-position: inside;
+      padding-left: 20px;
+    }
+    
+    ul li {
+      margin-bottom: 10px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+
+    .card {
+      background: var(--light-gray);
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      border: 1px solid var(--border-color);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+    }
+
+    .card .icon {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 15px;
+        color: var(--dark-green);
+    }
+
+    .card h3 {
+      margin: 10px 0;
+      font-size: 1.3rem;
+      color: var(--text-dark);
+      font-weight: 600;
+    }
+
+    .contacts {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .contacts p {
+        margin-bottom: 15px;
+    }
+
+    .contacts a.mail-button {
+      display: inline-block;
+      background: linear-gradient(to right, var(--primary-green), var(--primary-orange));
+      color: var(--white);
+      padding: 12px 25px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .contacts a.mail-button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(249, 115, 22, 0.3);
+    }
+    
+    form {
+      max-width: 600px;
+      margin: 30px auto 0;
+    }
+
+    form label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    form input, form textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: 'Montserrat', sans-serif;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    form input:focus, form textarea:focus {
+        outline: none;
+        border-color: var(--primary-orange);
+        box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+    }
+
+    form button {
+      background: linear-gradient(to right, var(--dark-green), var(--dark-orange));
+      color: white;
+      border: none;
+      padding: 15px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 600;
+      width: 100%;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+    }
+
+    form button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(249, 115, 22, 0.3);
+    }
+
+    form button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    footer {
+      background: var(--text-dark);
+      color: #9ca3af;
+      text-align: center;
+      padding: 30px 20px;
+      margin-top: 40px;
+      font-size: 0.9rem;
+    }
+
+    .success-message {
+      background-color: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 8px;
+      text-align: center;
+      display: none;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 10px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <svg class="logo-icon" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-6h2v6zm4 0h-2v-6h2v6z"/>
+      </svg>
+      <span class="logo-text">UniBot</span>
+    </div>
+    
+    <h1>UniBot Assistant</h1>
+    <p>Интеллектуальный помощник для деканата — автоматизация рутины, мгновенные ответы, комфорт для студентов</p>
+    <a href="#about" class="cta-button">Узнать больше</a>
+  </header>
+
+<main class="container">
+  <section id="about">
+    <h2>О проекте</h2>
+    <p>
+      Проект создан при поддержке Федерального государственного бюджетного учреждения «Фонд содействия развитию малых форм предприятий в научно-технической сфере» в рамках программы «Студенческий стартап» Федерального проекта «Платформа университетского технологического предпринимательства».
+    </p>
+  </section>
+
+  <section>
+    <h2>Кто мы?</h2>
+    <p>
+      Мы — студенческий стартап, цель которого создание инновационного цифрового помощника для университетов и бизнеса. В наш век технологий требуется автоматизация процессов и снижение нагрузки на сотрудников. Наше решение — чат-бот для деканата, который упрощает взаимодействие студентов и университета. В перспективе мы развиваем продукты, направленные на решение глобальных задач и повышение эффективности работы организаций.
+    </p>
+  </section>
+
+  <section>
+    <h2>Наши цели</h2>
+    <ul>
+      <li>Автоматизировать рутинные процессы в университете (справки, расписания, заявления), чтобы сотрудники деканата могли сосредоточиться на более важных задачах.</li>
+      <li>Создать удобный канал общения студентов с администрацией в формате чат-бота, доступного 24/7.</li>
+      <li>Сократить время ожидания ответов и повысить качество обслуживания студентов.</li>
+      <li>Сделать студенческую жизнь комфортнее за счёт цифровизации взаимодействия.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Почему это важно</h2>
+    <div class="features">
+      <div class="card">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <h3>🕒 Экономия времени</h3>
+        <p>Автоматизация снижает нагрузку и экономит время как студентов, так и сотрудников деканата.</p>
+      </div>
+      <div class="card">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+        <h3>🤝 Прозрачность и доверие</h3>
+        <p>Студенты получают быстрые и точные ответы, а университет укрепляет свою репутацию.</p>
+      </div>
+      <div class="card">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5 5 0 0010.28 2.625M13 16h4m-4 0a2 2 0 100 4m0-4l-1 1m-4-7h5m-5 0a2 2 0 100 4m0-4l-1 1m-4-7h5m-5 0a2 2 0 100 4m0-4l-1 1"></path></svg>
+        <h3>🚀 Инновации в образовании</h3>
+        <p>Внедрение чат-бота показывает, что вуз развивается и использует современные технологии.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Контакты</h2>
+    <div class="contacts">
+      <p>Хотите обсудить индивидуальную разработку или сотрудничество? Свяжитесь с нами:</p>
+      <a href="mailto:elizbarelen2003@gmail.com" class="mail-button">Почта</a>
+    </div>
+
+    <!-- Простая HTML форма без JavaScript -->
+    <form action="https://formsubmit.co/elizbarelen2003@gmail.com" method="POST">
+      <input type="hidden" name="_subject" value="Новое сообщение с UniBot">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_next" value="https://ssqsdfdfdf.netlify.app/#contact">
+      
+      <label for="name">Ваше имя:</label>
+      <input type="text" id="name" name="name" required>
+      
+      <label for="email">Ваша электронная почта:</label>
+      <input type="email" id="email" name="email" required>
+      
+      <label for="subject">Тема:</label>
+      <input type="text" id="subject" name="subject" required>
+      
+      <label for="message">Ваше сообщение:</label>
+      <textarea id="message" name="message" rows="5" required></textarea>
+      
+      <button type="submit">Отправить сообщение</button>
+    </form>
+
+    <div class="success-message" id="success-message">
+      Спасибо! Ваше сообщение отправлено. Мы свяжемся с вами в ближайшее время.
+    </div>
+  </section>
+</main>
+
+  <footer>
+    © 2025 UniBot Assistant — все права защищены.
+  </footer>
+
+  <script>
+    // Плавная прокрутка для якорных ссылок
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Анимация появления секций
+    document.addEventListener('DOMContentLoaded', () => {
+      const sections = document.querySelectorAll('section');
+
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.15
+      };
+
+      const sectionObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+          }
+        });
+      }, observerOptions);
+
+      sections.forEach(section => {
+        sectionObserver.observe(section);
+      });
+    });
+
+    // Показываем сообщение об успехе если в URL есть хэш
+    window.addEventListener('load', () => {
+      document.querySelector('section').classList.add('animate-in');
+      
+      // Если вернулись на страницу после отправки формы
+      if (window.location.hash === '#contact') {
+        const successMessage = document.getElementById('success-message');
+        successMessage.style.display = 'block';
+        
+        // Скрываем сообщение через 5 секунд
+        setTimeout(() => {
+          successMessage.style.display = 'none';
+        }, 5000);
+      }
+    });
+  </script>
+</body>
+</html>
